@@ -244,3 +244,8 @@ Important points
 
 
 *** Track Service ***
+
+
+
+# Step1 
+-> Creating the migrations
