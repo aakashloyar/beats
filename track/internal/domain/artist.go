@@ -9,4 +9,4 @@ type Artist struct {
 
 }
 
-//address bcz these are big 
+
