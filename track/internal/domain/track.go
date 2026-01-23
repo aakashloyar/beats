@@ -8,7 +8,7 @@ type Track struct {
 	ArtistID      string
 	AlbumID       *string
 	CoverImageURL *string
-	DurationMs    int64
+	DurationMS    int64
 	Language      Language
 	ReleaseDate   *time.Time
 	CreatedAt     time.Time
