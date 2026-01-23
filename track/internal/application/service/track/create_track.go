@@ -10,12 +10,19 @@ import (
 
 type CreateTrackService struct {
     trackRepo out.TrackRepository
-    clock     out.Clock
-    idGen     out.IDGenerator
+    clock     domain.Clock
+    idGen     domain.IDGenerator
 }
 
+func NewCreateTrackService( trackRepo out.TrackRepository, clock domain.Clock, idGen domain.IDGenerator) in.CreateTrackService {
+    return &CreateTrackService{
+        trackRepo: trackRepo,
+        clock : clock,
+        idGen : idGen,
+    }
+}
 
-func (s CreateTrackService) Execute(ctx context.Context, input *in.CreateTrackInput) (*in.CreateTrackOutput,error){
+func (s *CreateTrackService) Execute(ctx context.Context, input *in.CreateTrackInput) (*in.CreateTrackOutput,error){
     if input.Title == "" {
         return nil, errors.New("Title is required")
     }
@@ -25,7 +32,7 @@ func (s CreateTrackService) Execute(ctx context.Context, input *in.CreateTrackIn
         ArtistID: input.ArtistID,
         AlbumID: input.AlbumID,
         CoverImageURL: input.CoverImageURL,
-        DurationMs: input.DurationMs,
+        DurationMS: input.DurationMS,
         Language: input.Language,
         ReleaseDate: input.ReleaseDate,
         CreatedAt: s.clock.Now(),
