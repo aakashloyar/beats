@@ -4,7 +4,9 @@ import (
 	"database/sql"
 
 	"github.com/aakashloyar/beats/track/internal/application/ports/out"
+	"github.com/aakashloyar/beats/track/internal/application/ports/in"
 	"github.com/aakashloyar/beats/track/internal/domain"
+	"strings"
 )
 
 type TrackRepository struct {
@@ -15,7 +17,7 @@ func NewTrackRepository(db *sql.DB) out.TrackRepository {
 	return &TrackRepository{db: db}
 }
 
-func (r *TrackRepository) Save(track *domain.Track) error {
+func (r *TrackRepository) Save(track domain.Track) error {
 
 	query := `
 		INSERT INTO tracks (
@@ -46,7 +48,7 @@ func (r *TrackRepository) Save(track *domain.Track) error {
 	return err 
 }
 
-func (r *TrackRepository) FindById(id string) (*domain.Track, error) {
+func (r *TrackRepository) FindById(id string) (domain.Track, error) {
 	query := `
 		SELECT 
 			id,
@@ -77,36 +79,62 @@ func (r *TrackRepository) FindById(id string) (*domain.Track, error) {
 	)
 
 	if err != nil {
-		return nil, err
+		return domain.Track{}, err
 	}
-	return &track, nil 
+	return track, nil 
 }
 
 
-func (r *TrackRepository) FindByArtist(artistID string) ([]*domain.Track, error) {
+func (r *TrackRepository) ListTracks(input in.ListTracksInput) ([]domain.Track, error) {
 	query := `
-		SELECT
-			id,
-			title,
-			artist_id,
-			album_id,
-			cover_image_url,
-			duration_ms,
-			language,
-			release_date,
-			created_at
-		FROM tracks
-		WHERE artist_id = $1
-		ORDER BY release_date DESC
+	SELECT id, title, artist_id, album_id
+	FROM tracks
 	`
 
-	rows, err := r.db.Query(query, artistID)
+	var (
+		conditions []string
+		args       []any
+	)
+
+	if input.Title != "" {
+		conditions = append(conditions, "LOWER(title) LIKE LOWER(?)")
+		args = append(args, "%"+input.Title+"%")
+	}
+
+	if input.ArtistID != "" {
+		conditions = append(conditions, "artist_id = ?")
+		args = append(args, input.ArtistID)
+	}
+
+	if input.AlbumID != "" {
+		conditions = append(conditions, "album_id = ?")
+		args = append(args, input.AlbumID)
+	}
+	if len(conditions) > 0 {
+		query += " WHERE " + strings.Join(conditions, " AND ")
+	}
+
+	query += " ORDER BY created_at DESC "
+
+	if input.Limit != "" {
+		query += "LIMIT ?"
+		args = append(args, input.Limit)
+	}
+	if input.Offset != "" {
+		query += "OFFSET ?"
+		args = append(args, query)
+	}
+
+	rows, err := r.db.Query(query, args)
+
+
 	if err != nil {
 		return nil, err
 	}
+
 	defer rows.Close()
 
-	var tracks []*domain.Track
+	var tracks []domain.Track
 
 	for rows.Next() {
 		var track domain.Track
@@ -126,7 +154,7 @@ func (r *TrackRepository) FindByArtist(artistID string) ([]*domain.Track, error)
 			return nil, err
 		}
 
-		tracks = append(tracks, &track)
+		tracks = append(tracks, track)
 	}
 
 	return tracks, nil
