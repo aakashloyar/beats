@@ -15,7 +15,7 @@ func NewAudioVariantRepository(db *sql.DB) out.AudioVariantRepository {
 	return &AudioVariantRepository{db: db}
 }
 
-func (r *AudioVariantRepository) Save(v *domain.AudioVariant) error {
+func (r *AudioVariantRepository) Save(v domain.AudioVariant) error {
 	query := `
 		INSERT INTO audio_variants (
 			id,
@@ -47,7 +47,7 @@ func (r *AudioVariantRepository) Save(v *domain.AudioVariant) error {
 	return err
 }
 
-func (r *AudioVariantRepository) FindByTrackID(trackID string) ([]*domain.AudioVariant, error) {
+func (r *AudioVariantRepository) FindByTrackID(trackID string) ([]domain.AudioVariant, error) {
 	query := `
 		SELECT
 			id,
@@ -67,11 +67,11 @@ func (r *AudioVariantRepository) FindByTrackID(trackID string) ([]*domain.AudioV
 	rows, err := r.db.Query(query, trackID)
 
 	if err != nil {
-		return nil, err 
+		return nil, err
 	}
 	defer rows.Close()
 
-	var variants []*domain.AudioVariant 
+	var variants []domain.AudioVariant
 
 	for rows.Next() {
 		var v domain.AudioVariant
@@ -87,13 +87,13 @@ func (r *AudioVariantRepository) FindByTrackID(trackID string) ([]*domain.AudioV
 			&v.CreatedAt,
 		)
 		if err != nil {
-			return nil, err 
+			return nil, err
 		}
-		variants = append(variants, &v)
+		variants = append(variants, v)
 	}
 
 	if err := rows.Err(); err != nil {
-		return nil, err 
+		return nil, err
 	}
-	return variants, nil 
+	return variants, nil
 }
