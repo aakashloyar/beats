@@ -41,7 +41,10 @@ func main() {
 
 	gettrackService := tracksvc.NewGetTrackService(trackRepo)
 
-	trackHandler := httptrack.NewHandler(createtrackService,gettrackService)
+
+	listtracksService := tracksvc.NewListTracksService(trackRepo)
+
+	trackHandler := httptrack.NewHandler(createtrackService,gettrackService, listtracksService)
 
 
 
