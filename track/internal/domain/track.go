@@ -13,3 +13,11 @@ type Track struct {
 	ReleaseDate   *time.Time
 	CreatedAt     time.Time
 }
+
+type TrackFilter struct {
+	Title    *string
+	ArtistID *string
+	AlbumID  *string
+	Limit    *string
+	Offset   *string
+}
