@@ -1,7 +1,7 @@
 package out
 import (
 	"github.com/aakashloyar/beats/track/internal/domain"
-	"github.com/aakashloyar/beats/track/internal/application/ports/in"
+	"github.com/aakashloyar/beats/track/internal/application/ports/in/track"
 )
 
 type TrackRepository interface {

@@ -3,7 +3,7 @@ package track
 import (
 	"encoding/json"
 	"net/http"
-	"github.com/aakashloyar/beats/track/internal/application/ports/in"
+	"github.com/aakashloyar/beats/track/internal/application/ports/in/track"
 	"github.com/aakashloyar/beats/track/internal/domain"
 	"time"
 )

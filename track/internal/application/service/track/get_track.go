@@ -2,7 +2,7 @@ package track
 
 import (
 	"github.com/aakashloyar/beats/track/internal/application/ports/out"
-	"github.com/aakashloyar/beats/track/internal/application/ports/in"
+	"github.com/aakashloyar/beats/track/internal/application/ports/in/track"
     "github.com/aakashloyar/beats/track/internal/domain"
     "context"
 )
