@@ -14,7 +14,7 @@ type ListTracksInput struct {
 	Offset   string
 }
 
-type ListTrackOutput struct {
+type ListTracksOutput struct {
 	ID            string
 	Title         string
 	ArtistID      string
@@ -27,5 +27,5 @@ type ListTrackOutput struct {
 }
 
 type ListTracksService interface {
-	Execute(ctx context.Context, input ListTracksInput) ([]ListTrackOutput, error)
+	Execute(ctx context.Context, input ListTracksInput) ([]ListTracksOutput, error)
 }

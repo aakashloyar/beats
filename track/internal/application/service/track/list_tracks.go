@@ -17,7 +17,7 @@ func NewListTracksService(trackRepo out.TrackRepository) in.ListTracksService {
 	}
 }
 
-func (s *ListTracksService) Execute(ctx context.Context, input in.ListTracksInput) ([]in.ListTrackOutput, error) {
+func (s *ListTracksService) Execute(ctx context.Context, input in.ListTracksInput) ([]in.ListTracksOutput, error) {
 	x, err := s.trackRepo.ListTracks(domain.TrackFilter{
 		Title:    &input.Title,
 		ArtistID: &input.ArtistID,
@@ -28,9 +28,9 @@ func (s *ListTracksService) Execute(ctx context.Context, input in.ListTracksInpu
 	if err != nil {
 		return nil, err
 	}
-	var tracks []in.ListTrackOutput
+	var tracks []in.ListTracksOutput
 	for _, each := range x {
-		track := in.ListTrackOutput{
+		track := in.ListTracksOutput{
 			ID:            each.ID,
 			ArtistID:      each.ArtistID,
 			AlbumID:       each.AlbumID,
