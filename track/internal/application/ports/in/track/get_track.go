@@ -1,10 +1,26 @@
 package in
 
 import (
-	"github.com/aakashloyar/beats/track/internal/domain"
 	"context"
+	"github.com/aakashloyar/beats/track/internal/domain"
+	"time"
 )
 
+type GetTrackOutput struct {
+	ID            string
+	Title         string
+	ArtistID      string
+	AlbumID       *string
+	CoverImageURL *string
+	DurationMS    int64
+	Language      domain.Language
+	ReleaseDate   *time.Time
+	CreatedAt     time.Time
+}
+
+type GetTrackInput struct {
+	TrackID string
+}
 type GetTrackService interface {
-	Execute(ctx context.Context, trackID string) (domain.Track, error)
+	Execute(ctx context.Context, input GetTrackInput) (GetTrackOutput, error)
 }
