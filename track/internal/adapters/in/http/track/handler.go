@@ -78,7 +78,7 @@ func (h *Handler) CreateTrack(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) GetTrackByID(w http.ResponseWriter, r *http.Request, trackID string) {
-	out, err := h.getTrackService.Execute(r.Context(), trackID)
+	out, err := h.getTrackService.Execute(r.Context(), in.GetTrackInput{TrackID: trackID})
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
