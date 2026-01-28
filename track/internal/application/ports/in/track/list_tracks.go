@@ -1,19 +1,31 @@
 package in
 
 import (
-	"github.com/aakashloyar/beats/track/internal/domain"
 	"context"
+	"github.com/aakashloyar/beats/track/internal/domain"
+	"time"
 )
 
 type ListTracksInput struct {
 	Title    string
-    ArtistID string
+	ArtistID string
 	AlbumID  string
 	Limit    string
-	Offset   string 
+	Offset   string
+}
+
+type ListTrackOutput struct {
+	ID            string
+	Title         string
+	ArtistID      string
+	AlbumID       *string
+	CoverImageURL *string
+	DurationMS    int64
+	Language      domain.Language
+	ReleaseDate   *time.Time
+	CreatedAt     time.Time
 }
 
 type ListTracksService interface {
-    Execute(ctx context.Context, input ListTracksInput) ([]domain.Track, error)
+	Execute(ctx context.Context, input ListTracksInput) ([]ListTrackOutput, error)
 }
-
