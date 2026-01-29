@@ -6,7 +6,7 @@ import (
 )
 
 type ListAlbumsInput struct {
-	Title    string
+	Title string
 }
 
 type ListAlbumsOutput struct {
@@ -16,7 +16,6 @@ type ListAlbumsOutput struct {
 	ReleaseDate   *time.Time
 	CreatedAt     time.Time
 }
-
 
 type ListAlbumsService interface {
 	Execute(ctx context.Context, input ListAlbumsInput) ([]ListAlbumsOutput, error)
