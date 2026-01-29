@@ -2,6 +2,7 @@ package http
 
 import (
 	"net/http"
+	"strings"
 )
 
 func RegisterRoutes(mux *http.ServeMux, h *Handler) {
@@ -23,20 +24,37 @@ func RegisterRoutes(mux *http.ServeMux, h *Handler) {
 
 	})
 	mux.HandleFunc("/tracks/", func(w http.ResponseWriter, r *http.Request) {
-		switch r.Method {
-		case http.MethodGet:
-			{
-				trackID := r.URL.Path[len("/tracks/"):]
-				if trackID == "" {
-					http.Error(w, "missing track id", http.StatusBadRequest)
-					return
-				}
+
+		path := r.URL.Path[len("/tracks/"):]
+		parts := strings.Split(path, "/")
+
+		trackID := parts[0]
+		if trackID == "" {
+			http.Error(w, "missing track id", http.StatusBadRequest)
+			return
+		}
+
+		// /tracks/{id}
+		if len(parts) == 1 {
+			switch r.Method {
+			case http.MethodGet:
 				h.GetTrackByID(w, r, trackID)
-			}
-		default:
-			{
+			default:
 				http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
 			}
+			return
 		}
+
+		// /tracks/{id}/audio-variants
+		if len(parts) == 2 && parts[1] == "audio-variants" {
+			switch r.Method {
+			case http.MethodGet:
+				h.ListAudioVariantsByTrack(w, r, trackID)
+			default:
+				http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+			}
+			return
+		}
+		http.NotFound(w, r)
 	})
 }
