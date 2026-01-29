@@ -64,7 +64,6 @@ func (r *AlbumRepository) FindByID(albumID string) (domain.Album, error) {
 	return album, nil
 }
 
-
 func (r *AlbumRepository) ListAlbums(title string) ([]domain.Album, error) {
 	query := `
 	    SELECT 
