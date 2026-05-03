@@ -240,7 +240,10 @@ Important Points
 9. created_at
 -> TIMESTAMPZ
 
-Important points
+Working mechanism 
+
+-> main -> routes -> handler -> service -> repo -> database -> opposite cycle 
+
 
 
 *** Track Service ***
