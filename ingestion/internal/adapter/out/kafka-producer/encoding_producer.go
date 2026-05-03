@@ -25,7 +25,6 @@ func (p *FranzProducer) PublishUploadCompleted(
 		Timestamp:  time.Now(),
 	}
 
-	// async produce with sync wait
 	done := make(chan error, 1)
 
 	p.client.Produce(ctx, record, func(_ *kgo.Record, err error) {
